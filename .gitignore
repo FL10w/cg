@@ -1,0 +1,15 @@
+# Generated builds and local toolchains/dependency caches.
+**/build-*/
+**/.local/
+**/__pycache__/
+**/imgui.ini
+**/shaders/*.spv
+**/report/screenshots/*.ppm
+
+# Local credentials and editor/OS metadata.
+.env
+.env.*
+!.env.example
+**/.git-credentials
+.DS_Store
+Thumbs.db

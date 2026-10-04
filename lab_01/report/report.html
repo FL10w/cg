@@ -1,0 +1,61 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><title>314_Шитов_Лаб1</title><style>
+@page { size: A4; margin: 20mm 18mm 20mm 22mm;
+  @bottom-center { content: counter(page); font: 10pt "Liberation Serif"; } }
+@page:first { @bottom-center { content: none; } }
+body { font: 12pt "Liberation Serif", "DejaVu Serif", serif; line-height: 1.12; color: #111; }
+.page { break-before: page; }
+h1 { font-size: 16pt; margin: 0 0 4mm; }
+h2 { font-size: 13pt; margin: 4mm 0 2mm; }
+p { text-align: justify; text-indent: 8mm; margin: 0 0 3mm; }
+pre { font: 10pt "DejaVu Sans Mono"; line-height: 1.2; margin: 2mm 0 3mm; white-space: pre-wrap; }
+figure { margin: 0 0 3mm; text-align: center; }
+figure img { width: 130mm; }
+figure.wide img { width: 160mm; }
+.caption { font-size: 10pt; text-indent: 0; text-align: left; margin: 0 0 4mm; }
+.sources { font-size: 9pt; text-indent: 0; text-align: left; }
+.cover { height: 252mm; position: relative; text-align: center; font-size: 14pt; }
+.cover .institution { line-height: 1.3; }
+.cover .unit { margin-top: 9mm; font-size: 12pt; }
+.cover .title { margin-top: 48mm; line-height: 1.5; }
+.cover .topic { margin-top: 14mm; }
+.cover .author { margin-top: 48mm; text-align: right; line-height: 1.5; font-size: 12pt; }
+.cover .year { position: absolute; bottom: 5mm; width: 100%; }
+</style><body>
+<div class="cover">
+<div class="institution">МОСКОВСКИЙ АВИАЦИОННЫЙ ИНСТИТУТ<br>(НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ)</div>
+<div class="unit">Институт №8 «Компьютерные науки и прикладная математика»<br>Кафедра 806 «Вычислительная математика и программирование»</div>
+<div class="title">Лабораторная работа №1<br>по курсу «Компьютерная графика»</div>
+<div class="topic">Основы 3D-графики<br>Вариант 7 — тор</div>
+<div class="author">Выполнил: Шитов Никита Владиславович<br>Группа: М80-314БВ-24<br>Преподаватель: В. Д. Бахарев</div>
+<div class="year">Москва, 2026</div></div>
+<div class="page">
+<h1>Условие</h1>
+<p class="">Цель работы — освоить построение простого трёхмерного объекта, проецирование на двумерную плоскость и работу с матрицами. Разработать интерактивное приложение на C++ с использованием Vulkan, GLFW и Dear ImGui.</p>
+<p class="">Номер в списке группы P = 19, количество вариантов N = 12. Номер варианта: ((P − 1) mod N) + 1 = ((19 − 1) mod 12) + 1 = 7. Фигура варианта 7 — тор. Выполнено основное задание: построение и отрисовка одного тора с возможностью осмотра при помощи камеры.</p>
+<h1>Метод решения</h1>
+<h2>Построение поверхности</h2>
+<p class="">Тор задаётся большим радиусом R = 1,4 и радиусом трубки r = 0,5. Ось симметрии совпадает с Y. Параметры u и v изменяются от 0 до 2π:</p>
+<pre>x = (R + r cos v) cos u
+y = r sin v
+z = (R + r cos v) sin u</pre>
+<p class="">Использована сетка 64 × 32: 2048 вершин, 4096 треугольников. Каждая ячейка разбивается на два треугольника, соседние индексы вычисляются по модулю числа сегментов. Оба шва замкнуты. Нормаль поверхности n = (cos v cos u, sin v, cos v sin u). У тора фиксированный синий цвет; простое диффузное освещение показывает объём поверхности.</p>
+<h2>Камера, проекция и глубина</h2>
+<pre>pclip = P · V · (x, y, z, 1)ᵀ
+P = [ c/a, 0, 0, 0;  0, −c, 0, 0;
+        0, 0, f/(n−f), fn/(n−f);  0, 0, −1, 0 ]
+c = 1 / tan(FOV/2)</pre>
+<p class="">Матрица V строится функцией lookAt для орбитальной камеры. ЛКМ изменяет направление взгляда, колесо — расстояние до центра тора. P задаёт перспективную проекцию: FOV = 45°, n = 0,1, f = 100; a — отношение сторон области сцены. Матрицы хранятся по столбцам, в формуле записаны по строкам. Отрицательный знак Y учитывает экранную систему Vulkan; глубина после деления на w принадлежит [0; 1]. Буфер глубины с проверкой LESS скрывает закрытые части поверхности.</p>
+<h2>Отрисовка Vulkan</h2>
+<p class="">Вершины и индексы хранятся в VkBuffer, память выделяется через VMA. Матрица P·V передаётся в единственном uniform-буфере размером 64 байта и одном VkDescriptorSet. GLSL-шейдеры компилируются glslc в SPIR-V. VkPipeline задаёт формат вершин, растеризацию и проверку глубины; vkCmdDrawIndexed рисует тор. Затем ImGui выводит сведения о фигуре и подсказки управления.</p>
+<p class="">Uniform-буфер обновляется после ожидания fence предыдущего кадра. Сборка, два ракурса камеры и изменение размера окна проверены на Linux с Mesa llvmpipe. Тест геометрии и матриц прошёл; Vulkan Validation Layers и проверка синхронизации не зарегистрировали ошибок. Логи находятся в report/checks/.</p>
+</div>
+<div class="page">
+<h1>Результаты</h1>
+<figure class=""><img src="screenshots/default.png"></figure>
+<p class="caption">Рисунок 1 — тор в перспективной проекции. Слева отображаются сведения о фигуре и управление камерой.</p>
+<figure class=""><img src="screenshots/side.png"></figure>
+<p class="caption">Рисунок 2 — тот же тор с другого ракурса камеры. Геометрия, проекция и цвет фигуры сохраняются.</p>
+<h1>Выводы</h1>
+<p class="">В работе освоены параметрическое построение тора, индексная отрисовка, матрица камеры и перспективная проекция Vulkan. Реализован осмотр одной трёхмерной фигуры с помощью мыши; буфер глубины обеспечивает правильное перекрытие поверхности.</p>
+</div>
+</body></html>

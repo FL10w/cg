@@ -1,0 +1,3 @@
+default: 1280x900, 128771 visible torus pixels
+side: 1280x900, 103225 visible torus pixels
+PASS: basic torus, two camera views, window resize and Vulkan synchronization validation

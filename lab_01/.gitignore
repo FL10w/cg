@@ -1,0 +1,6 @@
+build-*/
+shaders/*.spv
+imgui.ini
+.local/
+report/screenshots/*.ppm
+__pycache__/
