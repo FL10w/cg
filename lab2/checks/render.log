@@ -1,0 +1,3 @@
+PASS: torus, camera pose, FOV (158153 -> 46086 pixels), window resize
+PASS: ambient + diffuse + specular (6320 samples), highlight (18221 pixels), light color
+PASS: all 8 Vulkan runs completed with synchronization validation and one descriptor set
