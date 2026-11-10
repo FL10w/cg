@@ -1,0 +1,3 @@
+PASS: textured torus, camera pose, FOV (158018 -> 46038 pixels), window resize
+PASS: image variation under ambient light, ambient + diffuse (6320 samples), highlight (20430 pixels), light color
+PASS: all 7 Vulkan runs completed with one descriptor set; validation layers unavailable (native smoke check only)

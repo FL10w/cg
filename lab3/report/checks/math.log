@@ -1,0 +1,19 @@
+Start testing: Nov 10 23:43 RTZ 2 (зима)
+----------------------------------------------------------
+1/1 Testing: scene-math-and-geometry
+1/1 Test: scene-math-and-geometry
+Command: "D:/Folder/cg/lab3/build-windows64-check/scene-tests.exe"
+Directory: D:/Folder/cg/lab3/build-windows64-check
+"scene-math-and-geometry" start time: Nov 10 23:43 RTZ 2 (зима)
+Output:
+----------------------------------------------------------
+PASS: torus geometry/winding, UV mapping/seams, dynamic UBO alignment, camera pose/movement/FOV/poles, Vulkan depth, zero light direction
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"scene-math-and-geometry" end time: Nov 10 23:43 RTZ 2 (зима)
+"scene-math-and-geometry" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 10 23:43 RTZ 2 (зима)

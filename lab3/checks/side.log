@@ -1,0 +1,6 @@
+Vulkan validation: windows_read_data_files_in_registry: Registry lookup failed to get layer manifest files.
+Vulkan device: NVIDIA GeForce RTX 4070; validation: unavailable
+Texture: torus.bmp, 512x256, RGBA8 sRGB, device-local image
+Torus: 2145 vertices, 4096 triangles; one descriptor set; dynamic UBO stride 192; vertex/index buffers in device-local memory
+Screenshot saved
+Completed successfully
